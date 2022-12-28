@@ -151,7 +151,7 @@ dataout = cell(total_trials+1,10);
  
 %% RDK Initilization Stuff
 
-
+baron_fixation_training = 0;
 
 
 %% Main Code
