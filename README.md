@@ -1,4 +1,4 @@
-# AV_Motion_Discrimination_Experiment
+# AV_Motion_Discrimination_Experiment - HUMAN Version
 Authors - Jackson Mayfield, Adriana Schoenhaut
 
 Experiment code repository for Auditory and Visual motion discrimination tasks. Ramachandran Laboratory - Vanderbilt University. 
