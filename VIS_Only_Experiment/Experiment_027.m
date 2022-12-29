@@ -12,7 +12,7 @@ data_file_directory = 'C:\Jackson\Adriana Stuff\Human_AV_Behavioral_Data\';
 figure_file_directory = 'C:\Jackson\Adriana Stuff\Human_AV_Figures\'; 
 
 
-addpath('C:\Jackson\Adriana Stuff\AV_Motion_Discrimination_Experiment\VIS_Only_Experiment\Eye_Movement_Data') %For the Eye Position vs time file 
+addpath('C:\Jackson\Adriana Stuff\AV_Human_Exp\VIS_Only_Experiment\Eye_Movement_Data') %For the Eye Position vs time file 
 
 %% Run App to get Paramters for test
 %In order to change any GUI paramters, go to Experiment_Parameters.mlapp
@@ -320,11 +320,11 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
                 
                 if keyIsDown
                     
-                    if strcmp(KbName(keyCode),'RightArrow')%Rightward Key press descision
+                    if strcmp(KbName(keyCode),'RightArrow')%Rightward Key press decision
                         x = h_voltage + target_distance_from_fixpoint_volts;
                         y = k_voltage + target_y_coord_volts;
 
-                    elseif strcmp(KbName(keyCode),'LeftArrow')%Leftward Key press descision
+                    elseif strcmp(KbName(keyCode),'LeftArrow')%Leftward Key press decision
                         x = h_voltage - target_distance_from_fixpoint_volts;
                         y = k_voltage + target_y_coord_volts;
                     end

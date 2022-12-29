@@ -7,9 +7,9 @@ close all;
 sca;
 %  Version info
 Version = 'Experiment_027_v.2.0' ; % after code changes, change version
-file_directory='C:\Jackson\Adriana Stuff\AV_Motion_Discrimination_Experiment\AUD_Only_Experiment';
-data_file_directory = 'C:\Jackson\Adriana Stuff\AV_Behavioral_Data\';
-figure_file_directory = 'C:\Jackson\Adriana Stuff\AV_Figures\'; 
+file_directory='C:\Jackson\Adriana Stuff\AV_Human_Exp\VIS_Only_Experiment';
+data_file_directory = 'C:\Jackson\Adriana Stuff\Human_AV_Behavioral_Data\';
+figure_file_directory = 'C:\Jackson\Adriana Stuff\Human_AV_Figures\'; 
 
 %when running baron on fixation training set to 1
 baron_fixation_training=0;
@@ -17,8 +17,8 @@ if baron_fixation_training==1
     target_reward='N/A';
 end
 
-addpath('C:\Jackson\Adriana Stuff\AV_Motion_Discrimination_Experiment\AUD_Only_Experiment\Auditory Stimulus');
-addpath('C:\Jackson\Adriana Stuff\AV_Motion_Discrimination_Experiment\AUD_Only_Experiment\Eye_Movement_Data'); 
+addpath('C:\Jackson\Adriana Stuff\AV_Human_Exp\AUD_Only_Experiment\Auditory Stimulus');
+addpath('C:\Jackson\Adriana Stuff\AV_Human_Exp\AUD_Only_Experiment\Eye_Movement_Data'); 
 
        
 
@@ -100,6 +100,10 @@ Screen('Flip', window);
 ifi = Screen('GetFlipInterval', window); 
 waitframes = 1;
 refresh_rate = 1/ifi;
+
+% Enable unified mode of KbName, so KbName accepts identical key names on
+% all operating systems:
+KbName('UnifyKeyNames');
 
 %% Structure Initialization 
 
@@ -243,8 +247,12 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
         %This Includes the reward for fixating for required fixation time
         for frame = 1:fix_time_frames - waitframes
 
-            x = TDT.read('x');
-            y = TDT.read('y');
+            % x = TDT.read('x');
+            % y = TDT.read('y');
+            % Lets assume human is fixating on the fixation pint the whole time, hard set x and y for every frame to match fixation coordinates
+            x = h_voltage;
+            y = k_voltage;
+
             [eye_data_matrix] = Send_Eye_Position_Data(TDT, start_block_time, eye_data_matrix, 1, trialcounter); %Collect eye position data with timestamp
             
             d = sqrt(((x-h_voltage).^2)+((y-k_voltage).^2));
@@ -320,8 +328,13 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
             
             for frame = 1:aud_time_frames - waitframes
                 
-                x = TDT.read('x');
-                y = TDT.read('y');
+                % x = TDT.read('x');
+                % y = TDT.read('y');
+
+                % Lets assume human is fixating on the fixation pint the whole time, hard set x and y for every frame to match fixation coordinates
+                x = h_voltage;
+                y = k_voltage;
+
                 [eye_data_matrix] = Send_Eye_Position_Data(TDT, start_block_time, eye_data_matrix, 2, trialcounter); %Collect eye position data with timestamp
                 
                 d = sqrt(((x-h_voltage).^2)+((y-k_voltage).^2));
@@ -376,8 +389,26 @@ while (BreakState ~= 1) && (block_counter <= total_blocks) % each block
             
             for frame = 1:target_time_frames - waitframes
                 
-                x = TDT.read('x');
-                y = TDT.read('y');
+                % Check the state of the keyboard.
+                [ keyIsDown, seconds, keyCode ] = KbCheck;
+                keyCode = find(keyCode, 1);
+                
+                if keyIsDown
+                    
+                    if strcmp(KbName(keyCode),'RightArrow')%Rightward Key press decision
+                        x = h_voltage + target_distance_from_fixpoint_volts;
+                        y = k_voltage + target_y_coord_volts;
+
+                    elseif strcmp(KbName(keyCode),'LeftArrow')%Leftward Key press descision
+                        x = h_voltage - target_distance_from_fixpoint_volts;
+                        y = k_voltage + target_y_coord_volts;
+                    end
+
+                else %No key is being pressed, default to fixation point voltages
+                    x = h_voltage;
+                    y = k_voltage;
+                end
+
                 [eye_data_matrix] = Send_Eye_Position_Data(TDT, start_block_time, eye_data_matrix, 3, trialcounter); %Collect eye position data with timestamp
                 %Update_Live_Eyetracker(x, y, h_voltage, k_voltage, ExpInfo.rew_radius_volts, hLine, 'on');
                 
