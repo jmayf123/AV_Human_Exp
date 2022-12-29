@@ -7,7 +7,7 @@ close all;
 sca;
 %  Version info
 Version = 'Experiment_027_v.2.0' ; % after code changes, change version
-file_directory='C:\Jackson\Adriana Stuff\AV_Human_Exp\VIS_Only_Experiment';
+file_directory='C:\Jackson\Adriana Stuff\AV_Human_Exp\AUD_Only_Experiment';
 data_file_directory = 'C:\Jackson\Adriana Stuff\Human_AV_Behavioral_Data\';
 figure_file_directory = 'C:\Jackson\Adriana Stuff\Human_AV_Figures\'; 
 
